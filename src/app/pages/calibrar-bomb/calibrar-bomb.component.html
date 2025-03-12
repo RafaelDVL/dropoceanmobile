@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<ion-card>
+  <ion-card-header>
+    <ion-card-title>Calibração das bombas</ion-card-title>
+    <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-select aria-label="Bombas" interface="action-sheet" placeholder="Selecione uma bomba">
+          <ion-select-option value="1">Bomba 1</ion-select-option>
+          <ion-select-option value="2">Bomba 2</ion-select-option>
+          <ion-select-option value="3">Bomba 3</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" fill="outline" (click)="calibrate()">Calibrar</ion-button>
+  </ion-card-content>
+
+
+  <ion-card-header>
+    <ion-card-title>Teste das bombas</ion-card-title>
+    <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
+  </ion-card-header>
+
+  <ion-card-content>
+    <ion-list>
+      <ion-item>
+        <ion-select aria-label="Bombas" interface="action-sheet" placeholder="Selecione uma bomba" [(ngModel)]="selectedBombTeste">
+          <ion-select-option value="1">Bomba 1</ion-select-option>
+          <ion-select-option value="2">Bomba 2</ion-select-option>
+          <ion-select-option value="3">Bomba 3</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  
+    <ion-list>
+      <ion-item>
+        <ion-select aria-label="Dosagem" interface="action-sheet" placeholder="Escolha a dosagem" [(ngModel)]="selectedDosage">
+          <ion-select-option value="1">1 ml</ion-select-option>
+          <ion-select-option value="2">2 ml</ion-select-option>
+          <ion-select-option value="3">3 ml</ion-select-option>
+          <ion-select-option value="5">5 ml</ion-select-option>
+          <ion-select-option value="10">10 ml</ion-select-option>
+          <ion-select-option value="15">15 ml</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-button expand="block" fill="outline" (click)="testBomb()">Testar</ion-button>
+  </ion-card-content>
+
+  
+  <ion-button fill="clear">Cancelar</ion-button>
+</ion-card>
+

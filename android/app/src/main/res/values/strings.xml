@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">dropoceanmobile</string>
+    <string name="title_activity_main">dropoceanmobile</string>
+    <string name="package_name">ionic.dropoceanmobile</string>
+    <string name="custom_url_scheme">ionic.dropoceanmobile</string>
+</resources>

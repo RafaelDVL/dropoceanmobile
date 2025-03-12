@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-title>Doser DropOcean</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Texto alterna conforme o estado da conexão -->
+  <h2 *ngIf="!isConnected; else connectedMsg">Selecione o ESP32</h2>
+  <ng-template #connectedMsg>
+    <h2>Dispositivo conectado</h2>
+  </ng-template>
+
+  <!-- Botão para conectar aparece apenas se não estiver conectado -->
+  <ion-button
+    expand="full"
+    (click)="connectToESP32()"
+    (keydown)="handleKeyDown($event)"
+    *ngIf="!isConnected">
+    🔗 Procurar e Conectar
+  </ion-button>
+
+  <!-- Botão para ir para configuração aparece apenas após a conexão -->
+  <ion-button
+    expand="full"
+    (click)="onClick()"
+    *ngIf="isConnected">
+    Ir para configuração
+  </ion-button>
+</ion-content>
+
+<div>
+	@if (showSucess) {
+		<ngb-toast 
+			[autohide]="true"
+			(hidden)="showSucess = false"
+			[ngClass]="'bg-success text-light full-width-toast'"
+		>
+			Dispositivo conectado com sucesso.
+		</ngb-toast>
+	}
+</div>
+<div>
+	@if (showError) {
+		<ngb-toast 
+			[autohide]="true"
+			(hidden)="showError = false"
+			[ngClass]="'bg-danger text-light full-width-toast'"
+		>
+			Erro ao conectar dispositivo.
+		</ngb-toast>
+	}
+</div>
+

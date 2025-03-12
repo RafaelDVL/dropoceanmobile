@@ -1,0 +1,99 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Configuração das Bombas</ion-title>
+
+    <ion-buttons slot="end">
+      <ion-button shape="round" fill="outline" (click)="sincronizarHoraESP()">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-accordion-group>
+    <ion-accordion class="acordionClass" *ngFor="let bomb of bombas; let i = index" [value]="'bomb' + (i + 1)">
+      <ion-item slot="header" color="light">
+        <ion-label>Bomba {{ i + 1 }}</ion-label>
+        <ion-chip [color]="bomb.status ? 'success' : 'danger'">
+          {{ bomb.status ? 'Ativada' : 'Desativada' }}
+        </ion-chip>
+      </ion-item>
+
+      <div class="ion-padding" slot="content">
+        <ion-text>Horário</ion-text>
+        <div class="timepicker-container">
+          <ngb-timepicker [(ngModel)]="bomb.time" [spinners]="true" [seconds]="false" [hourStep]="1" [minuteStep]="1">
+          </ngb-timepicker>
+          
+          <ion-button shape="round" (click)="toggleAtivacao(bomb)" fill="outline" [color]="bomb.status ? 'success' : 'danger'">
+            <ion-icon slot="icon-only" name="power-outline"></ion-icon>
+          </ion-button>
+
+          <ion-chip>Coef: {{ bomb.calibrCoef | number:'1.2-2' }}</ion-chip>
+        </div>
+
+        <ion-item>
+          <ion-text>Dosagem (ml)</ion-text>
+        </ion-item>
+
+        <ion-range [(ngModel)]="bomb.dosagem" min="0.5" max="15" step="0.1" color="primary">
+          <ion-label slot="start">0.5</ion-label>
+          <ion-label slot="end">15</ion-label>
+        </ion-range>
+
+        <div class="chip-container">
+          <ion-chip>💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
+        </div>
+
+        <ion-chip class="chip-todos" (click)="toggleTodos(bomb)" [color]="isAllSelected(bomb) ? 'primary' : 'medium'">
+          Todos
+        </ion-chip>
+
+        <div class="chip-grid">
+          <ion-chip *ngFor="let d of diasSemana; let j = index" (click)="toggleDia(bomb, j)"
+            [color]="bomb.diasSemanaSelecionados[j] ? 'primary' : 'medium'">
+            {{ d }}
+          </ion-chip>
+        </div>
+      </div>
+    </ion-accordion>
+  </ion-accordion-group>
+
+  <ion-button expand="block" fill="outline" color="warning" routerLink="/calibrar">
+    <ion-icon name="flask-outline" slot="start"></ion-icon>Calibrar Bombas
+  </ion-button>
+
+  <ion-button expand="block" fill="solid" color="primary" (click)="salvarConfiguracao()">
+    <ion-icon name="save-outline" slot="start"></ion-icon>Salvar
+  </ion-button>
+
+  <ion-button expand="block" fill="outline" color="tertiary" routerLink="/home">
+    <ion-icon name="arrow-back-outline" slot="start"></ion-icon>Voltar
+  </ion-button>
+</ion-content>
+
+<div>
+	@if (showSucess) {
+		<ngb-toast 
+			[autohide]="true"
+			(hidden)="showSucess = false"
+			[ngClass]="'bg-success text-light full-width-toast'"
+		>
+			Configuração salva com sucesso.
+		</ngb-toast>
+	}
+</div>
+<div>
+	@if (showError) {
+		<ngb-toast 
+			[autohide]="true"
+			(hidden)="showError = false"
+			[ngClass]="'bg-danger text-light full-width-toast'"
+		>
+			Erro ao enviar as configurações.
+		</ngb-toast>
+	}
+</div>
+
+

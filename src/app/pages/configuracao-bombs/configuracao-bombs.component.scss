@@ -1,0 +1,110 @@
+
+
+.ion-chip-days {
+    width: 60px;
+    /* Tamanho fixo */
+    text-align: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+ion-chip {
+    width: 90px;
+    /* Tamanho fixo */
+    text-align: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.chip-todos {
+    width: 100%;
+    /* Faz com que ocupe toda a largura */
+    text-align: center;
+    font-weight: bold;
+    /* Deixa o texto mais destacado */
+    background-color: var(--ion-color-secondary);
+    color: white;
+}
+
+.chip-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(75px, 1fr)); /* Ajuste mínimo e máximo */
+    gap: 0.25rem; /* Dá um melhor espaçamento entre os chips */
+    justify-items: center;
+    align-items: center;
+    padding: 10px 0;
+
+    ion-chip {
+        width: 70px; /* Define um tamanho fixo para os chips */
+        text-align: center;
+        justify-content: center;
+        font-size: 14px;
+    }
+}
+
+.full-width-toast {
+    width: 100%;
+    left: 0;
+    right: 0;
+    position: fixed;
+    bottom: 0;
+    border-radius: 0; /* Remove as bordas arredondadas */
+    text-align: center;
+  }
+
+
+
+.selected-chip {
+    background-color: var(--ion-color-primary);
+    color: white;
+}
+
+
+ion-item {
+    --border-radius: 8px;
+}
+
+ion-input {
+    text-align: right;
+    font-size: 16px;
+}
+
+.chip-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.625rem;
+
+    ion-chip {
+        width: 6.25rem;
+    }
+}
+
+.chip-ativado {
+    background-color: green;
+    color: white;
+}
+
+.chip-desativado {
+    background-color: red;
+    color: white;
+}
+
+.timepicker-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+.timepicker-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* Separa o timepicker e o botão */
+    gap: 15px;
+    /* Adiciona espaço entre os elementos */
+}
+
+.acordionClass {
+    margin-bottom: 8px;
+}
