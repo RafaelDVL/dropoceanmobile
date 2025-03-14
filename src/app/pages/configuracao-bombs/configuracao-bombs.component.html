@@ -56,18 +56,6 @@
           </div>
         </div>
 
-        <div class="boxDosagem">
-          <ion-text>Estoque Recipiente (ml)</ion-text>
-          <ion-range [(ngModel)]="bomb.quantidadeEstoque" min="100" max="500" step="0.1" color="primary">
-            <ion-label slot="start">100</ion-label>
-            <ion-label slot="end">500</ion-label>
-          </ion-range>
-  
-          <div class="chip-container">
-            <ion-chip>💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
-          </div>
-        </div>
-
         <ion-chip class="chip-todos" (click)="toggleTodos(bomb)" [color]="isAllSelected(bomb) ? 'primary' : 'medium'">
           Todos
         </ion-chip>
@@ -94,7 +82,7 @@
     <ion-button expand="block" fill="outline" color="tertiary" (click)="irParaLog()" style="width: 50%;">
       <ion-icon name="receipt" slot="start"></ion-icon>Log de Acionamentos
     </ion-button>
-    <ion-button expand="block" fill="outline" color="secundary" (click)="irParaCalculadora()" style="width: 50%;">
+    <ion-button expand="block" fill="outline" color="secundary" style="width: 50%;">
       <ion-icon name="calculator" slot="start"></ion-icon>calculadora
     </ion-button>
   </div>
