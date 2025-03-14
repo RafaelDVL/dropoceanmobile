@@ -14,7 +14,13 @@
   <ion-accordion-group>
     <ion-accordion class="acordionClass" *ngFor="let bomb of bombas; let i = index" [value]="'bomb' + (i + 1)">
       <ion-item slot="header" color="light">
-        <ion-label>Bomba {{ i + 1 }}</ion-label>
+        <ion-label style="font-size: 0.625rem;">
+          Bomba {{ i + 1 }} 
+          <ion-chip (click)="ajusteNome(bomb)" [outline]="true" [color]="getBombaColor(i)" style="margin-left: 0.625rem;">
+            {{ bomb.name || 'Sem Nome' }}
+          </ion-chip>
+        </ion-label>
+        
         <ion-chip [color]="bomb.status ? 'success' : 'danger'">
           {{ bomb.status ? 'Ativada' : 'Desativada' }}
         </ion-chip>
@@ -25,25 +31,41 @@
         <div class="timepicker-container">
           <ngb-timepicker [(ngModel)]="bomb.time" [spinners]="true" [seconds]="false" [hourStep]="1" [minuteStep]="1">
           </ngb-timepicker>
-          
-          <ion-button shape="round" (click)="toggleAtivacao(bomb)" fill="outline" [color]="bomb.status ? 'success' : 'danger'">
+
+          <ion-button shape="round" (click)="toggleAtivacao(bomb)" fill="outline"
+            [color]="bomb.status ? 'success' : 'danger'">
             <ion-icon slot="icon-only" name="power-outline"></ion-icon>
           </ion-button>
-
-          <ion-chip>Coef: {{ bomb.calibrCoef | number:'1.2-2' }}</ion-chip>
+          <div>
+            <ion-chip>Coef: {{ bomb.calibrCoef | number:'1.2-2' }}</ion-chip>
+            <ion-chip [outline]="true" color="warning" style="font-size: 10px;" (click)="ajusteEstoque(bomb)">
+              Recipiente: {{bomb.quantidadeEstoque}} mls / Dias restantes: {{(bomb.quantidadeEstoque / bomb.dosagem) | number:'1.1-1'}}</ion-chip>
+          </div>
         </div>
 
-        <ion-item>
+        <div class="boxDosagem">
           <ion-text>Dosagem (ml)</ion-text>
-        </ion-item>
+ 
+          <ion-range [(ngModel)]="bomb.dosagem" min="0.5" max="15" step="0.1" color="primary">
+            <ion-label slot="start">0.5</ion-label>
+            <ion-label slot="end">15</ion-label>
+          </ion-range>
+  
+          <div class="chip-container">
+            <ion-chip (click)="ajusteDosagem(bomb)">💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
+          </div>
+        </div>
 
-        <ion-range [(ngModel)]="bomb.dosagem" min="0.5" max="15" step="0.1" color="primary">
-          <ion-label slot="start">0.5</ion-label>
-          <ion-label slot="end">15</ion-label>
-        </ion-range>
-
-        <div class="chip-container">
-          <ion-chip>💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
+        <div class="boxDosagem">
+          <ion-text>Estoque Recipiente (ml)</ion-text>
+          <ion-range [(ngModel)]="bomb.quantidadeEstoque" min="100" max="500" step="0.1" color="primary">
+            <ion-label slot="start">100</ion-label>
+            <ion-label slot="end">500</ion-label>
+          </ion-range>
+  
+          <div class="chip-container">
+            <ion-chip>💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
+          </div>
         </div>
 
         <ion-chip class="chip-todos" (click)="toggleTodos(bomb)" [color]="isAllSelected(bomb) ? 'primary' : 'medium'">
@@ -68,32 +90,27 @@
     <ion-icon name="save-outline" slot="start"></ion-icon>Salvar
   </ion-button>
 
-  <ion-button expand="block" fill="outline" color="tertiary" routerLink="/home">
-    <ion-icon name="arrow-back-outline" slot="start"></ion-icon>Voltar
-  </ion-button>
+  <div class="d-flex flex-row justify-content-between">
+    <ion-button expand="block" fill="outline" color="tertiary" (click)="irParaLog()" style="width: 50%;">
+      <ion-icon name="receipt" slot="start"></ion-icon>Log de Acionamentos
+    </ion-button>
+    <ion-button expand="block" fill="outline" color="secundary" (click)="irParaCalculadora()" style="width: 50%;">
+      <ion-icon name="calculator" slot="start"></ion-icon>calculadora
+    </ion-button>
+  </div>
 </ion-content>
 
 <div>
-	@if (showSucess) {
-		<ngb-toast 
-			[autohide]="true"
-			(hidden)="showSucess = false"
-			[ngClass]="'bg-success text-light full-width-toast'"
-		>
-			Configuração salva com sucesso.
-		</ngb-toast>
-	}
+  @if (showSucess) {
+  <ngb-toast [autohide]="true" (hidden)="showSucess = false" [ngClass]="'bg-success text-light full-width-toast'">
+    Configuração salva com sucesso.
+  </ngb-toast>
+  }
 </div>
 <div>
-	@if (showError) {
-		<ngb-toast 
-			[autohide]="true"
-			(hidden)="showError = false"
-			[ngClass]="'bg-danger text-light full-width-toast'"
-		>
-			Erro ao enviar as configurações.
-		</ngb-toast>
-	}
+  @if (showError) {
+  <ngb-toast [autohide]="true" (hidden)="showError = false" [ngClass]="'bg-danger text-light full-width-toast'">
+    Erro ao enviar as configurações.
+  </ngb-toast>
+  }
 </div>
-
-

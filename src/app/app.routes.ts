@@ -19,5 +19,13 @@ export const routes: Routes = [
       import('./pages/calibrar-bomb/calibrar-bomb.component').then(
         (m) => m.CalibrarBombComponent
       ),
+  }
+  ,
+  {
+    path: 'calc',
+    loadComponent: () =>
+      import('./pages/calculator/calculator.component').then(
+        (m) => m.CalculatorComponent
+      ),
   },
 ];

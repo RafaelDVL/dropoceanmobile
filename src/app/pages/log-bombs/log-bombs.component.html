@@ -1,0 +1,9 @@
+<div>
+  <h2>Log de Acionamento das Bombas</h2>
+  <p *ngIf="logs.length === 0">Nenhum log recebido.</p>
+  <pre>{{ logs | json }}</pre>
+  <ul *ngIf="logs.length > 0">
+    <li *ngFor="let log of logs">{{ log }}</li>
+  </ul>
+  <p *ngIf="logs.length === 0">Nenhum log recebido.</p>
+</div>

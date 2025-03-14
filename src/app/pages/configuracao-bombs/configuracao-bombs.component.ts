@@ -4,10 +4,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { Bomb, BombsConfig } from 'src/app/models/bombs';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { addIcons } from 'ionicons';
-import { logoIonic, refreshOutline, flaskOutline, saveOutline, arrowBackOutline, powerOutline } from 'ionicons/icons';
+import { logoIonic, refreshOutline, flaskOutline, saveOutline, arrowBackOutline, powerOutline, calculator, receipt } from 'ionicons/icons';
 import { Router, RouterModule } from '@angular/router';
 import { ToastController} from '@ionic/angular';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   standalone: true,
@@ -28,9 +29,10 @@ export class ConfiguracaoBombsComponent implements OnInit {
   constructor(
     private readonly bluetoothService: BluetoothService,
     private readonly router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private alertController: AlertController
   ) {
-    addIcons({refreshOutline,powerOutline,flaskOutline,saveOutline,arrowBackOutline,logoIonic});
+    addIcons({refreshOutline,powerOutline,flaskOutline,saveOutline,arrowBackOutline,logoIonic, calculator, receipt});
   }
 
   ngOnInit() {
@@ -52,6 +54,11 @@ export class ConfiguracaoBombsComponent implements OnInit {
         this.bombsConfig.bomb2,
         this.bombsConfig.bomb3,
       ];
+
+      this.bombas.forEach((bomb, index) => {
+        bomb.name = bomb.name || `Bomba ${index + 1}`; // Nome padrão caso não tenha sido configurado
+        bomb.quantidadeEstoque = bomb.quantidadeEstoque ?? 0; // Garante que o estoque nunca seja indefinido
+      });
       console.log('✅ Configuração carregada com sucesso!');
     } else {
       console.warn('⚠️ Falha ao carregar configuração do ESP32!');
@@ -123,6 +130,121 @@ export class ConfiguracaoBombsComponent implements OnInit {
       this.abrirToastError();
     }
   }
+
+  irParaLog() {
+    this.router.navigate(['/log']);
+  }
+
+  irParaCalculadora() {
+    this.router.navigate(['/calc']);
+  }
+
+  async ajusteNome(bomb: Bomb) {
+    const alert = await this.alertController.create({
+      header: 'Editar Nome',
+      inputs: [
+        {
+          name: 'name',
+          type: 'text',
+          value: bomb.name,
+          placeholder: 'Digite o nome da bomba'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Salvar',
+          handler: (data) => {
+            if (data.name.trim() !== '') {
+              bomb.name = data.name.trim();
+              console.log(`✅ Nome atualizado: ${bomb.name}`);
+              this.salvarConfiguracao(); // 🔹 Salva imediatamente após editar
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async ajusteEstoque(bomb: Bomb) {
+    const alert = await this.alertController.create({
+      header: 'Editar Estoque',
+      inputs: [
+        {
+          name: 'quantidadeEstoque',
+          type: 'number',
+          value: bomb.quantidadeEstoque,
+          placeholder: 'Digite a quantidade em ml',
+          min: 0 // Garante que não seja negativo
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Salvar',
+          handler: (data) => {
+            const estoque = parseFloat(data.quantidadeEstoque);
+            if (!isNaN(estoque) && estoque >= 0) {
+              bomb.quantidadeEstoque = estoque;
+              console.log(`✅ Estoque atualizado: ${bomb.quantidadeEstoque} ml`);
+              this.salvarConfiguracao(); // 🔹 Salva imediatamente após editar
+            } else {
+              console.warn('⚠️ Valor inválido para estoque.');
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async ajusteDosagem(bomb: Bomb) {
+    const alert = await this.alertController.create({
+      header: 'Editar Dosagem',
+      inputs: [
+        {
+          name: 'dosagem',
+          type: 'number',
+          value: bomb.dosagem,
+          placeholder: 'Digite a dosagem (ml)',
+          min: 0.5,
+          max: 15,
+        }
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Salvar',
+          handler: (data) => {
+            const dosagem = parseFloat(data.dosagem);
+            if (!isNaN(dosagem) && dosagem >= 0.5 && dosagem <= 15) {
+              bomb.dosagem = dosagem;
+              console.log(`✅ Dosagem atualizada: ${bomb.dosagem} ml`);
+            } else {
+              console.warn('⚠️ Valor inválido! A dosagem deve estar entre 0.5 e 15 ml.');
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  getBombaColor(index: number): string {
+    const cores = ['tertiary', 'warning', 'secondary']; // Definição das cores
+    return cores[index % cores.length]; // Retorna a cor correspondente
+  }
+  
 
   abrirToastSucess() {
     this.showSucess = true;

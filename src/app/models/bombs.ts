@@ -3,7 +3,9 @@ export class Bomb {
   dosagem: number = 1;
   diasSemanaSelecionados: boolean[] = [false, false, false, false, false, false, false];
   status: boolean = false;
-  calibrCoef: number = 1;  // Novo coeficiente de calibração
+  name: string = 'nome';
+  quantidadeEstoque: number = 0;
+  calibrCoef: number = 1;
 }
 
 export class BombsConfig {

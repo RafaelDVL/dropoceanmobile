@@ -10,6 +10,7 @@ export class BluetoothService {
   private device: BleDevice | null = null;
   private readonly SERVICE_UUID = "12345678-1234-5678-1234-56789abcdef0";
   private readonly CHARACTERISTIC_UUID = "abcd1234-5678-90ab-cdef-1234567890ab";
+  private readonly LOG_CHARACTERISTIC_UUID = "fedcba98-7654-3210-fedc-ba9876543210";
 
 
   private connectionStatusSubject = new Subject<boolean>();
@@ -221,6 +222,26 @@ async calibrateBomb(bombIndex: number) {
     console.log("📥 Configuração atualizada recebida:", updatedConfig);
   } catch (error) {
     console.error("❌ Erro na calibração da bomba:", error);
+  }
+}
+
+async getLog(): Promise<string> {
+  if (!this.device) {
+    console.error("❌ Nenhum dispositivo conectado!");
+    return "";
+  }
+  try {
+    const value = await BleClient.read(
+      this.device.deviceId,
+      this.SERVICE_UUID,
+      this.LOG_CHARACTERISTIC_UUID
+    );
+    const logString = dataViewToText(value);
+    console.log("📥 Log recebido do ESP32:", logString);
+    return logString;
+  } catch (error) {
+    console.error("❌ Erro ao obter log:", error);
+    return "";
   }
 }
  
