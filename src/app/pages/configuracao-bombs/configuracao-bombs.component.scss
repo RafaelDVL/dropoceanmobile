@@ -1,3 +1,8 @@
+ion-content{
+    --background: linear-gradient(rgba(0, 0, 0, 0.781), rgba(0, 0, 0, 0.664)),
+                url('/assets/reef.jpg') no-repeat center center / cover;
+}
+
 
 
 .ion-chip-days {
@@ -15,6 +20,7 @@ ion-chip {
     justify-content: center;
     font-size: 14px;
 }
+
 
 .chip-todos {
     width: 100%;
@@ -54,6 +60,10 @@ ion-chip {
 
 
 .boxDosagem{
+    margin-top: 1.3125rem;
+}
+
+.boxDiasSemanas{
     margin-top: 1.3125rem;
 }
 
@@ -110,4 +120,6 @@ ion-input {
 
 .acordionClass {
     margin-bottom: 8px;
+    background-color: #121212bd;
 }
+

@@ -18,7 +18,7 @@ import { AlertController } from '@ionic/angular';
   imports: [SharedModule, NgbModule, RouterModule, NgbToastModule],
 })
 export class ConfiguracaoBombsComponent implements OnInit {
-  showSucess = false;
+  showSuccess = false;
   showError = false;
 
   horaAtualESP: string = 'Carregando...';
@@ -116,20 +116,23 @@ export class ConfiguracaoBombsComponent implements OnInit {
 
   async salvarConfiguracao() {
     try {
-      const configSemSegundos = JSON.parse(JSON.stringify(this.bombsConfig));
-      Object.values(configSemSegundos).forEach((bomb: any) => {
-        bomb.dosagem = this.normalizarDosagem(bomb.dosagem);
-        delete bomb.time.second;
-      });
-      console.log('📡 Enviando configuração para ESP32...');
-      await this.bluetoothService.setBombsConfig(configSemSegundos);
-      console.log('✅ Configuração enviada!');
-      this.abrirToastSucess();
+        const configSemSegundos = JSON.parse(JSON.stringify(this.bombsConfig));
+
+        Object.values(configSemSegundos).forEach((bomb: any) => {
+            bomb.dosagem = this.normalizarDosagem(bomb.dosagem);
+            bomb.calibrCoef = parseFloat(bomb.calibrCoef.toFixed(2)); // 🔹 Arredonda para 2 casas decimais
+            delete bomb.time.second;
+        });
+
+        console.log('📡 Enviando configuração para ESP32:', configSemSegundos);
+        await this.bluetoothService.setBombsConfig(configSemSegundos);
+        console.log('✅ Configuração enviada!');
+        this.abrirToastSucess();
     } catch (error) {
-      console.error('❌ Erro ao salvar configuração:', error);
-      this.abrirToastError();
+        console.error('❌ Erro ao salvar configuração:', error);
+        this.abrirToastError();
     }
-  }
+}
 
   irParaLog() {
     this.router.navigate(['/log']);
@@ -161,7 +164,7 @@ export class ConfiguracaoBombsComponent implements OnInit {
             if (data.name.trim() !== '') {
               bomb.name = data.name.trim();
               console.log(`✅ Nome atualizado: ${bomb.name}`);
-              this.salvarConfiguracao(); // 🔹 Salva imediatamente após editar
+              this.salvarConfiguracao();
             }
           }
         }
@@ -179,7 +182,7 @@ export class ConfiguracaoBombsComponent implements OnInit {
           type: 'number',
           value: bomb.quantidadeEstoque,
           placeholder: 'Digite a quantidade em ml',
-          min: 0 // Garante que não seja negativo
+          min: 0
         }
       ],
       buttons: [
@@ -247,7 +250,7 @@ export class ConfiguracaoBombsComponent implements OnInit {
   
 
   abrirToastSucess() {
-    this.showSucess = true;
+    this.showSuccess = true;
   }
 
   abrirToastError() {

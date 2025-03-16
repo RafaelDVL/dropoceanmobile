@@ -6,25 +6,18 @@
 
 <ion-content class="ion-padding">
   <!-- Texto alterna conforme o estado da conexão -->
-  <h2 *ngIf="!isConnected; else connectedMsg">Selecione o ESP32</h2>
+  <h2 *ngIf="!isConnected; else connectedMsg">Conecte seu dispositivo dosador</h2>
   <ng-template #connectedMsg>
     <h2>Dispositivo conectado</h2>
   </ng-template>
 
   <!-- Botão para conectar aparece apenas se não estiver conectado -->
-  <ion-button
-    expand="full"
-    (click)="connectToESP32()"
-    (keydown)="handleKeyDown($event)"
-    *ngIf="!isConnected">
+  <ion-button expand="block"(click)="connectToESP32()" *ngIf="!isConnected" color="tertiary">
     🔗 Procurar e Conectar
   </ion-button>
 
   <!-- Botão para ir para configuração aparece apenas após a conexão -->
-  <ion-button
-    expand="full"
-    (click)="onClick()"
-    *ngIf="isConnected">
+  <ion-button expand="block" (click)="onClick()" *ngIf="isConnected" color="tertiary">
     Ir para configuração
   </ion-button>
 </ion-content>

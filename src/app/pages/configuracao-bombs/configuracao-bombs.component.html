@@ -14,7 +14,7 @@
   <ion-accordion-group>
     <ion-accordion class="acordionClass" *ngFor="let bomb of bombas; let i = index" [value]="'bomb' + (i + 1)">
       <ion-item slot="header" color="light">
-        <ion-label style="font-size: 0.625rem;">
+        <ion-label style="font-size: 0.800rem;">
           Bomba {{ i + 1 }} 
           <ion-chip (click)="ajusteNome(bomb)" [outline]="true" [color]="getBombaColor(i)" style="margin-left: 0.625rem;">
             {{ bomb.name || 'Sem Nome' }}
@@ -45,60 +45,58 @@
 
         <div class="boxDosagem">
           <ion-text>Dosagem (ml)</ion-text>
+          <div class="chip-container">
+            <ion-chip (click)="ajusteDosagem(bomb)">💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
+          </div>
  
           <ion-range [(ngModel)]="bomb.dosagem" min="0.5" max="15" step="0.1" color="primary">
             <ion-label slot="start">0.5</ion-label>
             <ion-label slot="end">15</ion-label>
           </ion-range>
-  
-          <div class="chip-container">
-            <ion-chip (click)="ajusteDosagem(bomb)">💧 {{ bomb.dosagem | number:'1.1-1' }} ml</ion-chip>
-          </div>
         </div>
 
-        <ion-chip class="chip-todos" (click)="toggleTodos(bomb)" [color]="isAllSelected(bomb) ? 'primary' : 'medium'">
-          Todos
-        </ion-chip>
-
-        <div class="chip-grid">
-          <ion-chip *ngFor="let d of diasSemana; let j = index" (click)="toggleDia(bomb, j)"
-            [color]="bomb.diasSemanaSelecionados[j] ? 'primary' : 'medium'">
-            {{ d }}
+        <div class="boxDiasSemanas">
+          <ion-text>Dias de acionamento</ion-text>
+          <ion-chip class="chip-todos" (click)="toggleTodos(bomb)" [color]="isAllSelected(bomb) ? 'primary' : 'medium'">
+            Todos
           </ion-chip>
-        </div>
+  
+          <div class="chip-grid">
+            <ion-chip *ngFor="let d of diasSemana; let j = index" (click)="toggleDia(bomb, j)"
+              [color]="bomb.diasSemanaSelecionados[j] ? 'primary' : 'medium'">
+              {{ d }}
+            </ion-chip>
+          </div>
+        </div>    
       </div>
     </ion-accordion>
   </ion-accordion-group>
 
-  <ion-button expand="block" fill="outline" color="warning" routerLink="/calibrar">
+  <ion-button expand="block" fill="outline" color="warning" routerLink="/calibrar" shape="round">
     <ion-icon name="flask-outline" slot="start"></ion-icon>Calibrar Bombas
   </ion-button>
 
-  <ion-button expand="block" fill="solid" color="primary" (click)="salvarConfiguracao()">
+  <ion-button expand="block" fill="outline" color="success" (click)="salvarConfiguracao()" shape="round">
     <ion-icon name="save-outline" slot="start"></ion-icon>Salvar
   </ion-button>
 
   <div class="d-flex flex-row justify-content-between">
-    <ion-button expand="block" fill="outline" color="tertiary" (click)="irParaLog()" style="width: 50%;">
+    <ion-button expand="block" fill="outline" color="tertiary" (click)="irParaLog()" style="width: 50%;" shape="round">
       <ion-icon name="receipt" slot="start"></ion-icon>Log de Acionamentos
     </ion-button>
-    <ion-button expand="block" fill="outline" color="secundary" style="width: 50%;">
+    <ion-button expand="block" fill="outline" color="secundary" style="width: 50%;" shape="round">
       <ion-icon name="calculator" slot="start"></ion-icon>calculadora
     </ion-button>
   </div>
 </ion-content>
 
 <div>
-  @if (showSucess) {
-  <ngb-toast [autohide]="true" (hidden)="showSucess = false" [ngClass]="'bg-success text-light full-width-toast'">
+  <ngb-toast *ngIf="showSuccess" [autohide]="true" (hidden)="showSuccess = false" [ngClass]="'bg-success text-light full-width-toast'">
     Configuração salva com sucesso.
   </ngb-toast>
-  }
 </div>
 <div>
-  @if (showError) {
-  <ngb-toast [autohide]="true" (hidden)="showError = false" [ngClass]="'bg-danger text-light full-width-toast'">
+  <ngb-toast *ngIf="showError" [autohide]="true" (hidden)="showError = false" [ngClass]="'bg-danger text-light full-width-toast'">
     Erro ao enviar as configurações.
   </ngb-toast>
-  }
 </div>
