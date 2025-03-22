@@ -26,7 +26,8 @@ import {
   IonToolbar,
   IonSelect,
   IonSelectOption,
-  IonRange
+  IonRange,
+  IonSegment, IonSegmentButton, IonToggle
 } from '@ionic/angular/standalone';
 
 @NgModule({
@@ -56,7 +57,7 @@ import {
     IonTitle,
     IonToolbar,
     IonSelect,
-    IonSelectOption,IonRange
+    IonSelectOption,IonRange,IonSegment, IonSegmentButton, IonToggle
   ],
   exports: [
     CommonModule,
@@ -88,7 +89,7 @@ import {
     IonSelect,
     IonSelectOption,
     IonSelect,
-    IonSelectOption,IonRange
+    IonSelectOption,IonRange,IonSegment, IonSegmentButton, IonToggle
   ],
 })
 export class SharedModule {}

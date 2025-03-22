@@ -28,4 +28,11 @@ export const routes: Routes = [
         (m) => m.CalculatorComponent
       ),
   },
+  {
+    path: 'log',
+    loadComponent: () =>
+      import('./pages/log-bombs/log-bombs.component').then(
+        (m) => m.LogBombsComponent
+      ),
+  },
 ];

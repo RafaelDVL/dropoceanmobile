@@ -14,16 +14,18 @@
   <ion-accordion-group>
     <ion-accordion class="acordionClass" *ngFor="let bomb of bombas; let i = index" [value]="'bomb' + (i + 1)">
       <ion-item slot="header" color="light">
-        <ion-label style="font-size: 0.800rem;">
-          Bomba {{ i + 1 }} 
-          <ion-chip (click)="ajusteNome(bomb)" [outline]="true" [color]="getBombaColor(i)" style="margin-left: 0.625rem;">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <ion-label style="font-size: 0.600rem;">
+            Bomba {{ i + 1 }}          
+          </ion-label>
+          <ion-chip (dblclick)="ajusteNome(bomb)" [outline]="true" [color]="getBombaColor(i)" style="margin-left: 0.625rem;font-size: 12px; width: 120px;">
             {{ bomb.name || 'Sem Nome' }}
           </ion-chip>
-        </ion-label>
+          <ion-chip style="font-size: 12px; width: 100px; margin-left: 1.6rem;"  [color]="bomb.status ? 'success' : 'danger'">
+            {{ bomb.status ? 'Ativada' : 'Desativada' }}
+          </ion-chip>
+        </div>
         
-        <ion-chip [color]="bomb.status ? 'success' : 'danger'">
-          {{ bomb.status ? 'Ativada' : 'Desativada' }}
-        </ion-chip>
       </ion-item>
 
       <div class="ion-padding" slot="content">
@@ -81,7 +83,7 @@
   </ion-button>
 
   <div class="d-flex flex-row justify-content-between">
-    <ion-button expand="block" fill="outline" color="tertiary" (click)="irParaLog()" style="width: 50%;" shape="round">
+    <ion-button expand="block" fill="outline" color="tertiary" style="width: 50%;" shape="round">
       <ion-icon name="receipt" slot="start"></ion-icon>Log de Acionamentos
     </ion-button>
     <ion-button expand="block" fill="outline" color="secundary" style="width: 50%;" shape="round">
