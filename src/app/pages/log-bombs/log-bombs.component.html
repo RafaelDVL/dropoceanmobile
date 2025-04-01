@@ -1,9 +1,40 @@
-<div>
-  <h2>Log de Acionamento das Bombas</h2>
-  <p *ngIf="logs.length === 0">Nenhum log recebido.</p>
-  <pre>{{ logs | json }}</pre>
-  <ul *ngIf="logs.length > 0">
-    <li *ngFor="let log of logs">{{ log }}</li>
-  </ul>
-  <p *ngIf="logs.length === 0">Nenhum log recebido.</p>
-</div>
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Histórico de Dosagens
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="getLogs()">
+        <ion-icon name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ng-container *ngIf="logs.length > 0; else semLogs">
+    <ion-card *ngFor="let log of logs">
+      <ion-card-header>
+        <ion-card-title>
+          {{ log.b }} - {{ log.o }}
+        </ion-card-title>
+        <ion-card-subtitle>{{ log.ts }}</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <p>
+          💧 Dosagem aplicada: <strong>{{ log.d }}ml</strong>
+        </p>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #semLogs>
+    <ion-text color="medium">
+      <p class="ion-text-center">Nenhum log disponível ainda.</p>
+    </ion-text>
+  </ng-template>
+</ion-content>
+<ion-button expand="block" color="danger" (click)="clearLogs()">
+  <ion-icon name="trash-outline" slot="start"></ion-icon>
+  Apagar Logs
+</ion-button>

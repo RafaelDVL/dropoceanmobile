@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BluetoothService } from 'src/app/services/bluetooth.service';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { NavController, Platform  } from '@ionic/angular';
 
 @Component({
   standalone: true,
@@ -14,7 +15,12 @@ export class CalibrarBombComponent  implements OnInit {
   selectedBombTeste: number | null = null;
   selectedDosage: number | null = null;
 
-  constructor(private serviceBLE: BluetoothService) { }
+  constructor(private serviceBLE: BluetoothService,
+    private navController: NavController,private platform: Platform ) {
+      this.platform.backButton.subscribeWithPriority(10, () => {
+        this.navController.navigateBack('/config');
+      });
+     }
 
   ngOnInit() {}
 
@@ -36,5 +42,9 @@ export class CalibrarBombComponent  implements OnInit {
 
     console.log(`📤 Enviando teste para Bomba ${this.selectedBombTeste} dosando ${this.selectedDosage} ml`);
     this.serviceBLE.testBomb(this.selectedBombTeste - 1, this.selectedDosage);
+  }
+
+  cancelar() {
+    this.navController.navigateBack('/config');
   }
 }

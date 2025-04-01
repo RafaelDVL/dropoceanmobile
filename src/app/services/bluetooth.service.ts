@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BleClient, BleDevice, dataViewToText } from '@capacitor-community/bluetooth-le';
 import { BombsConfig } from '../models/bombs';
 import { Subject } from 'rxjs';
+import { LogEntry } from '../models/log-entry';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ export class BluetoothService {
   private device: BleDevice | null = null;
   private readonly SERVICE_UUID = "12345678-1234-5678-1234-56789abcdef0";
   private readonly CHARACTERISTIC_UUID = "abcd1234-5678-90ab-cdef-1234567890ab";
-  private readonly LOG_CHARACTERISTIC_UUID = "fedcba98-7654-3210-fedc-ba9876543210";
+  private readonly LOG_CHARACTERISTIC_UUID = "abcd5678-1234-5678-1234-abcdef123456";
 
 
   private connectionStatusSubject = new Subject<boolean>();
@@ -225,11 +226,12 @@ async calibrateBomb(bombIndex: number) {
   }
 }
 
-async getLog(): Promise<string> {
+async getLog(): Promise<LogEntry[]> {
   if (!this.device) {
     console.error("❌ Nenhum dispositivo conectado!");
-    return "";
+    return [];
   }
+
   try {
     const value = await BleClient.read(
       this.device.deviceId,
@@ -238,10 +240,39 @@ async getLog(): Promise<string> {
     );
     const logString = dataViewToText(value);
     console.log("📥 Log recebido do ESP32:", logString);
-    return logString;
+
+    const logs = JSON.parse(logString) as LogEntry[];
+
+    // ✅ Ordena por timestamp (opcional)
+    logs.sort((a, b) => a.ts.localeCompare(b.ts));
+
+    return logs;
   } catch (error) {
     console.error("❌ Erro ao obter log:", error);
-    return "";
+    return [];
+  }
+}
+
+async clearLogs(): Promise<void> {
+  if (!this.device) {
+    console.error("❌ Nenhum dispositivo conectado!");
+    return;
+  }
+
+  try {
+    const encoder = new TextEncoder();
+    const dataView = new DataView(encoder.encode("CLEAR").buffer);
+
+    await BleClient.write(
+      this.device.deviceId,
+      this.SERVICE_UUID,
+      this.LOG_CHARACTERISTIC_UUID,
+      dataView
+    );
+
+    console.log("🗑️ Logs apagados com sucesso!");
+  } catch (error) {
+    console.error("❌ Erro ao apagar logs:", error);
   }
 }
  
