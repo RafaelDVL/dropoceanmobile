@@ -94,17 +94,28 @@ export class ConfiguracaoBombsComponent implements OnInit {
       console.warn('⚠️ ESP32 não está conectado. Não foi possível sincronizar.');
       return;
     }
+  
     const agora = new Date();
-    const horaFormatada = `${agora.getHours()}:${agora.getMinutes()}:${agora.getSeconds()}`;
-    console.log('⏳ Enviando hora para ESP32:', horaFormatada);
+  
+    const dia = String(agora.getDate()).padStart(2, '0');
+    const mes = String(agora.getMonth() + 1).padStart(2, '0');
+    const ano = agora.getFullYear();
+    const hora = String(agora.getHours()).padStart(2, '0');
+    const minuto = String(agora.getMinutes()).padStart(2, '0');
+    const segundo = String(agora.getSeconds()).padStart(2, '0');
+  
+    const dataHoraFormatada = `${dia}/${mes}/${ano} ${hora}:${minuto}:${segundo}`;
+    console.log('⏳ Enviando data e hora para ESP32:', dataHoraFormatada);
+  
     try {
-      await this.bluetoothService.setTime(horaFormatada);
+      await this.bluetoothService.setTime(dataHoraFormatada);
       console.log('✅ Hora sincronizada com ESP32!');
-      this.atualizarHoraESP();
+      this.atualizarHoraESP(); // opcional
     } catch (error) {
       console.error('❌ Erro ao sincronizar hora:', error);
     }
   }
+  
 
   async atualizarHoraESP() {
     if (!this.bluetoothService.isConnected()) {

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/standalone';
-import { SharedModule } from '../shared/shared.module';
-import { BluetoothService } from '../services/bluetooth.service';
-import { Router } from '@angular/router';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../shared/shared.module';
+import { Router } from '@angular/router';
+
+import { BluetoothService } from '../services/bluetooth.service';
+import { PermissionService } from '../services/permission.service';
+
 
 @Component({
   standalone: true,
@@ -13,27 +16,38 @@ import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
   imports: [IonHeader, IonToolbar, IonTitle, IonContent, SharedModule, NgbToastModule],
 })
 export class HomePage {
-
   showSucess = false;
   showError = false;
-  isConnected: boolean = false;
+  isConnected = false;
   time: string = 'Carregando...';
 
   constructor(
-    private readonly bluetoothService: BluetoothService,
-    private readonly router: Router
+    private bluetoothService: BluetoothService,
+    private permissionService: PermissionService,
+    private router: Router
   ) {}
 
   async ngOnInit() {
     await this.bluetoothService.initializeBluetooth();
-    // Inscreve-se para receber o status de conexão e atualiza a variável local
-    this.bluetoothService.connectionStatus$.subscribe(isConnected => {
-      this.isConnected = isConnected;
+    this.bluetoothService.connectionStatus$.subscribe((connected) => {
+      this.isConnected = connected;
       this.abrirToastSucess();
     });
   }
 
   async connectToESP32() {
+    const permsOK = await this.permissionService.checkAndRequestPermissions();
+    if (!permsOK) {
+      alert('❌ Permissões de Bluetooth e Localização não concedidas.');
+      return;
+    }
+
+    const gpsAtivo = await this.permissionService.isGpsEnabled();
+    if (!gpsAtivo) {
+      alert('❗ O GPS precisa estar ativado para escanear dispositivos Bluetooth.');
+      return;
+    }
+
     await this.bluetoothService.scanAndConnect();
   }
 
@@ -41,12 +55,9 @@ export class HomePage {
     this.time = await this.bluetoothService.getTime();
   }
 
-  // Ao clicar, o usuário decide quando ir para a próxima tela
   onClick() {
     this.router.navigate(['/config']);
   }
-
-  handleKeyDown(event: KeyboardEvent) {}
 
   abrirToastSucess() {
     this.showSucess = true;
@@ -55,5 +66,4 @@ export class HomePage {
   abrirToastError() {
     this.showError = true;
   }
-
 }

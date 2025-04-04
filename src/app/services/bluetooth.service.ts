@@ -134,7 +134,6 @@ async setTime(time: string) {
   }
 }
 
-
 async testBomb(bomb: number, dosagem: number): Promise<void> {
   if (!this.device) {
     console.error("❌ Nenhum dispositivo conectado!");

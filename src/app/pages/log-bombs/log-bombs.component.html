@@ -34,7 +34,14 @@
     </ion-text>
   </ng-template>
 </ion-content>
-<ion-button expand="block" color="danger" (click)="clearLogs()">
-  <ion-icon name="trash-outline" slot="start"></ion-icon>
-  Apagar Logs
-</ion-button>
+<div>
+  <ion-button expand="block" color="danger" (click)="clearLogs()">
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    Apagar Logs
+  </ion-button>
+  <ion-button expand="block" color="primary" (click)="cancelar()">
+    <ion-icon name="trash-outline" slot="start"></ion-icon>
+    Voltar
+  </ion-button>
+</div>
+
