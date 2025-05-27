@@ -1,5 +1,10 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/config">
+        <ion-icon slot="icon-only" name="arrow-back"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>Calculadora</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -8,27 +13,56 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Cálculo Salinidade (TPA)</ion-card-title>
-      <ion-card-subtitle>calcule a quantidade de sal por litro</ion-card-subtitle>
+      <ion-card-title>Cálculo Dosagem</ion-card-title>
+      <ion-card-subtitle>Calcule a dosagem diária de seu balling</ion-card-subtitle>
     </ion-card-header>
-
-    <ion-card-content class="d-flex flex-column">
-      <ion-chip><span>Litros de Água = </span><span> {{litrosAgua}} Lts</span></ion-chip>
-      <ion-chip>Sal por Litro da Marca = {{gramasLitro}} Gramas/Litro</ion-chip>
-      <ion-chip>{{quantidadeSal}}</ion-chip>
+  
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">KH Inicial:</ion-label>
+        <ion-input type="number" [(ngModel)]="KhInicial"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">KH Atual:</ion-label>
+        <ion-input type="number" [(ngModel)]="KhAtual"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Dias de Intervalo:</ion-label>
+        <ion-input type="number" [(ngModel)]="diasIntervalo"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">KH Alvo:</ion-label>
+        <ion-input type="number" [(ngModel)]="KhAlvo"></ion-input>
+      </ion-item>
+  
+      <ion-item>
+        <ion-label position="stacked">Dosagem Atual (ml/dia):</ion-label>
+        <ion-input type="number" [(ngModel)]="dosagemDiariaAtual"></ion-input>
+      </ion-item>
+      <ion-button (click)="calcularDosagem()">Calcular</ion-button>
+  
+      <ion-item *ngIf="dosagemDiariaRecomendada > 0">
+        <ion-label position="stacked">Dosagem Recomendada (ml/dia):</ion-label>
+        <ion-input type="number" [(ngModel)]="dosagemDiariaRecomendada" readonly></ion-input>
+      </ion-item>
     </ion-card-content>
   </ion-card>
 
   <ion-card>
     <ion-card-header>
-      <ion-card-title>Calculo Dosagem</ion-card-title>
-      <ion-card-subtitle>Calcule a dosagem diaria de seu balling</ion-card-subtitle>
+      <ion-card-title>Cálculo Salinidade (TPA)</ion-card-title>
+      <ion-card-subtitle>calcule a quantidade de sal por litro</ion-card-subtitle>
     </ion-card-header>
 
-    <ion-card-content>
-      Here's a small text description for the card content. Nothing more, nothing less.
+    <ion-card-content class="d-flex flex-column">
+      <ion-chip></ion-chip>
     </ion-card-content>
   </ion-card>
+
+  
 
   <ion-card>
     <ion-card-header>

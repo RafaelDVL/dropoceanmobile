@@ -1,3 +1,11 @@
+.full-width-toast {
+  width: 100vw !important;
+  position: fixed;
+  bottom: 20px;
+  left: 0;
+  z-index: 9999;
+}
+
 #container {
   text-align: center;
 

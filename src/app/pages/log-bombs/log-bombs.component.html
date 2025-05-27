@@ -14,18 +14,18 @@
 <ion-content class="ion-padding">
   <ng-container *ngIf="logs.length > 0; else semLogs">
     <ion-card *ngFor="let log of logs">
-      <ion-card-header>
-        <ion-card-title>
-          {{ log.b }} - {{ log.o }}
-        </ion-card-title>
-        <ion-card-subtitle>{{ log.ts }}</ion-card-subtitle>
-      </ion-card-header>
-      <ion-card-content>
-        <p>
-          💧 Dosagem aplicada: <strong>{{ log.d }}ml</strong>
-        </p>
-      </ion-card-content>
-    </ion-card>
+  <ion-card-header>
+    <ion-card-title [ngClass]="getTextClass(log.b)">
+      {{ log.b }} - {{ log.o }}
+    </ion-card-title>
+    <ion-card-subtitle>{{ formatTimestamp(log.ts) }}</ion-card-subtitle>
+  </ion-card-header>
+  <ion-card-content>
+    <p>
+      💧 Dosagem aplicada: <strong>{{ log.d }}ml</strong>
+    </p>
+  </ion-card-content>
+</ion-card>
   </ng-container>
 
   <ng-template #semLogs>

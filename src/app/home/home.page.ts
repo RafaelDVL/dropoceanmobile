@@ -36,18 +36,6 @@ export class HomePage {
   }
 
   async connectToESP32() {
-    const permsOK = await this.permissionService.checkAndRequestPermissions();
-    if (!permsOK) {
-      alert('❌ Permissões de Bluetooth e Localização não concedidas.');
-      return;
-    }
-
-    const gpsAtivo = await this.permissionService.isGpsEnabled();
-    if (!gpsAtivo) {
-      alert('❗ O GPS precisa estar ativado para escanear dispositivos Bluetooth.');
-      return;
-    }
-
     await this.bluetoothService.scanAndConnect();
   }
 

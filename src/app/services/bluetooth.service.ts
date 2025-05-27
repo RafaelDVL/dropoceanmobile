@@ -1,23 +1,107 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import { BleClient, BleDevice, dataViewToText } from '@capacitor-community/bluetooth-le';
 import { BombsConfig } from '../models/bombs';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { LogEntry } from '../models/log-entry';
+import { StatusPayload } from '../models/StatusPayload';
+
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class BluetoothService {
   private device: BleDevice | null = null;
   private readonly SERVICE_UUID = "12345678-1234-5678-1234-56789abcdef0";
   private readonly CHARACTERISTIC_UUID = "abcd1234-5678-90ab-cdef-1234567890ab";
   private readonly LOG_CHARACTERISTIC_UUID = "abcd5678-1234-5678-1234-abcdef123456";
+  private readonly TIME_CHAR_UUID = 'abcd1234-5678-90ab-cdef-1234567890ab';
+
+  public statusSubject = new BehaviorSubject<StatusPayload>({
+  time:       '—/—/— —:—',
+  wifi:       { connected: false, rssi: 0 },
+  firebase:   { ready: false }
+  
+});
+
+public status$ = this.statusSubject.asObservable();
 
 
   private connectionStatusSubject = new Subject<boolean>();
   public connectionStatus$ = this.connectionStatusSubject.asObservable();
   
-  constructor() {}
+  constructor(private ngZone: NgZone) {}
+  
+  async fetchStatusOnce(): Promise<void> {
+  if (!this.device) return;
+
+  try {
+    // Lê uma vez o mesmo characteristic que as notificações usam
+    const value = await BleClient.read(
+      this.device.deviceId,
+      this.SERVICE_UUID,
+      this.TIME_CHAR_UUID
+    );
+    const text = dataViewToText(value);
+
+    // Tenta parsear JSON; se falhar, cai no fallback de string pura
+    let parsed: StatusPayload;
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = {
+        time: text,
+        wifi: { connected: false, rssi: 0 },
+        firebase: { ready: false }
+      };
+    }
+
+    // Empurra para o BehaviorSubject para que todos que
+    // estejam subscritos recebam esse valor inicial
+    this.statusSubject.next(parsed);
+
+  } catch (error) {
+    console.error("❌ Erro ao ler status inicial via Bluetooth:", error);
+  }
+}
+
+  async startTimeNotifications() {
+  if (!this.device) return;
+  await BleClient.startNotifications(
+    this.device.deviceId,
+    this.SERVICE_UUID,
+    this.TIME_CHAR_UUID,
+    (value) => {
+      // run inside Angular zone
+      this.ngZone.run(() => {
+        const text = dataViewToText(value);
+        let parsed: StatusPayload;
+        try {
+          parsed = JSON.parse(text);
+        } catch {
+          // fallback for old plain-string behavior
+          parsed = {
+            time: text,
+            wifi: { connected: false, rssi: 0 },
+            firebase: { ready: false }
+          };
+        }
+        this.statusSubject.next(parsed);
+      });
+    }
+  );
+}
+
+  async stopTimeNotifications() {
+    if (!this.device) return;
+    await BleClient.stopNotifications(
+      this.device.deviceId,
+      this.SERVICE_UUID,
+      this.TIME_CHAR_UUID
+    );
+    console.log('⏸️ Pausadas notificações de tempo');
+  }
 
   async initializeBluetooth() {
     try {

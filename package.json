@@ -19,12 +19,14 @@
     "@angular/common": "^19.0.0",
     "@angular/compiler": "^19.0.0",
     "@angular/core": "^19.0.0",
+    "@angular/fire": "^19.2.0",
     "@angular/forms": "^19.0.0",
     "@angular/localize": "^19.2.1",
     "@angular/platform-browser": "^19.0.0",
     "@angular/platform-browser-dynamic": "^19.0.0",
     "@angular/router": "^19.0.0",
     "@awesome-cordova-plugins/android-permissions": "^6.16.0",
+    "@awesome-cordova-plugins/core": "6.16.0",
     "@capacitor-community/bluetooth-le": "^7.0.0",
     "@capacitor-community/http": "^1.4.1",
     "@capacitor/android": "7.0.1",
@@ -35,10 +37,11 @@
     "@capacitor/haptics": "7.0.0",
     "@capacitor/ios": "7.0.1",
     "@capacitor/keyboard": "7.0.0",
-    "@capacitor/status-bar": "7.0.0",
+    "@capacitor/status-bar": "^7.0.0",
     "@ionic/angular": "^8.0.0",
     "@ng-bootstrap/ng-bootstrap": "^18.0.0",
     "cordova-plugin-android-permissions": "^1.1.5",
+    "firebase": "^11.8.1",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -71,5 +74,13 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.6.3"
-  }
+  },
+  "browserslist": [
+    "Chrome >=79",
+    "ChromeAndroid >=79",
+    "Firefox >=70",
+    "Edge >=79",
+    "Safari >=14",
+    "iOS >=14"
+  ]
 }

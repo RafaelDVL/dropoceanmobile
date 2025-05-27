@@ -40,8 +40,11 @@ export class CalibrarBombComponent  implements OnInit {
       return;
     }
 
+    const bombIndex = this.selectedBombTeste - 1;
+    const dosageNum = Number(this.selectedDosage);
+
     console.log(`📤 Enviando teste para Bomba ${this.selectedBombTeste} dosando ${this.selectedDosage} ml`);
-    this.serviceBLE.testBomb(this.selectedBombTeste - 1, this.selectedDosage);
+    this.serviceBLE.testBomb(bombIndex, dosageNum);
   }
 
   cancelar() {

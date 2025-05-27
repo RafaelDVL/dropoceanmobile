@@ -1,12 +1,25 @@
 ion-card {
-    margin-bottom: 12px;
-    border-left: 4px solid var(--ion-color-primary);
-  }
-  
-  ion-card-title {
-    font-size: 1.1rem;
-  }
-  
-  ion-card-subtitle {
-    color: var(--ion-color-medium);
-  }
+  margin-bottom: 12px;
+  border-left: 4px solid var(--ion-color-primary);
+}
+
+ion-card-title {
+  font-size: 1.1rem;
+}
+
+ion-card-subtitle {
+  color: var(--ion-color-medium);
+}
+
+
+.bomba1 {
+  color: rgb(164, 53, 255);
+}
+
+.bomba2 {
+  color: rgb(25, 255, 113);
+}
+
+.bomba3 {
+  color: #2dcaff; // azul claro
+}
