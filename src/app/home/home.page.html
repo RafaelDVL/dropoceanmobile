@@ -17,9 +17,9 @@
   </ion-button>
 
   <!-- Botão para ir para configuração aparece apenas após a conexão -->
-  <ion-button expand="block" (click)="onClick()" *ngIf="isConnected" color="tertiary">
-    Ir para configuração
-  </ion-button>
+  <ion-button expand="block" (click)="onClick()" *ngIf="isConnected" color="tertiary">Ir para configuração</ion-button>
+
+  <ion-button expand="block" fill="outline" color="tertiary" style="width: 50%;" shape="round" routerLink="/log"><ion-icon name="receipt" slot="start"></ion-icon>Log de Acionamentos</ion-button>
 </ion-content> 
 
 <div>
